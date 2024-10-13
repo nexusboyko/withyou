@@ -13,7 +13,7 @@ const Breathe = () => {
   const startBreath = () => {
     setIdx(2);
     setBreathe(true);
-    setBreathText("");
+    setBreathText("take a breath");
 
     setTimeout(() => {
       setIdx(-1);
@@ -24,22 +24,25 @@ const Breathe = () => {
   return (
     <motion.div className="w-full h-full flex items-center justify-center">
       <motion.button
-        whileHover={{ scale: breathe ? 1 : 1.1 }}
+        whileHover={{ ...(breathe ? {} : { scale: 1.1 }) }}
         whileTap={{ scale: 0.9 }}
+        initial={{ scale: 0 }}
         animate={
           idx === 2
             ? {
-                width: ["400px", "100vw"],
-                height: ["400px", "100vh"],
+                // width: ["400px", "100vw"],
+                // height: ["400px", "100vh"],
+                scale: [1, 5],
+                aspectRatio: "1/1",
                 transition: {
                   duration: 4,
                   repeat: numBreaths,
                   ease: "linear",
                   repeatType: "reverse",
-                  // delay: 2,
+                  repeatDelay: 2,
                 },
               }
-            : { width: "400px", height: "400px" }
+            : { width: "400px", height: "400px", scale: 1 }
         }
         transition={{
           type: "spring",
