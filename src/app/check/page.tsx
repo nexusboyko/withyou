@@ -7,12 +7,47 @@ const Check = () => {
   const [idx, setIdx] = React.useState(-1);
   const [questions, setQuestions] = React.useState(false);
 
-  // TODO: add user answers to questions
+  const toAsk: Object[] = [
+    {
+      q: "Are you okay?",
+      a1: "yes",
+      a2: "no",
+    },
+  ];
+
   const playQuestions = () => {
     return (
       <>
-        <p className="absolute z-40 h-full w-full flex font-semibold items-center justify-center">
-          are you okay?
+        <p className="absolute z-40 h-full w-full flex flex-col font-semibold text-3xl items-center justify-center">
+          {toAsk.map((q: any, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="absolute z-40 h-full w-full flex flex-col font-semibold text-3xl items-center justify-center"
+            >
+              <p>{q.q}</p>
+              <motion.div className="flex gap-2 p-7">
+                <motion.button
+                  className="rounded-full h-[50px] aspect-square text-xl p-5 hover:bg-white/15 transition-all ease-in-out duration-200 filter hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] flex justify-center items-center "
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  onClick={() => {}}
+                >
+                  {q.a1}
+                </motion.button>
+                <motion.button
+                  className="rounded-full h-[50px] aspect-square text-xl p-5 hover:bg-white/15 transition-all ease-in-out duration-200 filter hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] flex justify-center items-center "
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                  onClick={() => {}}
+                >
+                  {q.a2}
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          ))}
         </p>
         <span
           className="absolute rounded-full w-full h-full blur-sm
@@ -26,14 +61,15 @@ const Check = () => {
   return (
     <motion.div className="w-full h-full flex items-center justify-center">
       <motion.button
-        whileHover={{ scale: questions ? 1 : 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        whileHover={{ ...(questions ? {} : { scale: 1.1 }) }}
+        whileTap={{ ...(questions ? {} : { scale: 0.9 }) }}
+        initial={{ scale: 0 }}
         animate={
           questions
-            ? { width: "70vh", height: "70vh" }
+            ? { width: "70vh", height: "70vh", scale: 1 }
             : idx === 0
-            ? { width: "130px", height: "130px" }
-            : { width: "100px", height: "100px" }
+            ? { width: "130px", height: "130px", scale: 1 }
+            : { width: "100px", height: "100px", scale: 1 }
         }
         transition={{
           type: "spring",
