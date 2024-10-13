@@ -14,8 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <header className="flex justify-center items-center top-0 w-screen py-8">
+      <body className="absolute h-screen w-screen bg-gradient-to-t from-black via-slate-900 to-black backdrop-blur-sm">
+        <header className="absolute flex justify-center items-center top-0 w-screen py-8">
           <User />
         </header>
         {children}
