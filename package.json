@@ -1,31 +1,39 @@
 {
-  "name": "withyou",
-  "version": "0.1.0",
+  "name": "with-you",
+  "author": "Alexander Boyko",
+  "description": "A simple electron app",
+  "icon": "./public/vite.svg",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder --win",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.7.0",
-    "@prisma/client": "^5.20.0",
-    "framer-motion": "^11.11.8",
-    "next": "14.2.15",
-    "next-auth": "^5.0.0-beta.22",
-    "openai": "^4.67.3",
-    "react": "^18",
-    "react-dom": "^18"
+    "@tailwindcss/vite": "^4.0.14",
+    "framer-motion": "^12.5.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^4.0.14"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "daisyui": "^4.12.13",
-    "postcss": "^8",
-    "prisma": "^5.20.0",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
-  }
+    "@types/react": "^18.2.64",
+    "@types/react-dom": "^18.2.21",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^30.0.1",
+    "electron-builder": "^24.13.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.6",
+    "vite-plugin-electron": "^0.28.6",
+    "vite-plugin-electron-renderer": "^0.14.5"
+  },
+  "main": "dist-electron/main.js"
 }
