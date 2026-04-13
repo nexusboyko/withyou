@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WithYou — Prototype Preview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #e2e8f0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .arena {
+      position: absolute;
+    }
+
+    .ball {
+      position: absolute;
+      border-radius: 50%;
+      cursor: grab;
+      transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+                  width    0.45s cubic-bezier(0.34, 1.4, 0.64, 1),
+                  height   0.45s cubic-bezier(0.34, 1.4, 0.64, 1);
+      will-change: transform;
+      user-select: none;
+    }
+
+    .ball:hover { filter: brightness(1.1); }
+    .ball:active { cursor: grabbing; }
+
+    #controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 10px 18px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font: 13px/1 system-ui, sans-serif;
+      color: #334155;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      user-select: none;
+    }
+
+    #controls label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #controls input[type=range] {
+      width: 100px;
+      accent-color: #475569;
+    }
+
+    #controls span {
+      width: 26px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<div class="arena" id="arena"></div>
+
+<div id="controls">
+  <label>
+    size
+    <input type="range" id="sliderS" min="30" max="140" value="80">
+    <span id="valS">80</span>
+  </label>
+  <label>
+    spacing
+    <input type="range" id="sliderStep" min="50" max="200" value="110">
+    <span id="valStep">110</span>
+  </label>
+</div>
+
+<script>
+  const PALETTE = {
+    b1: "#e53935",
+    b2: "#1e88e5",
+    b3: "#43a047",
+    b4: "#fdd835",
+    b5: "#fb8c00",
+  };
+
+  const BALLS = ["b1", "b2", "b3", "b4", "b5"];
+  const MIN_ANGLE = ((2 * Math.PI) / 5) * 0.8;
+
+  let S    = 80;
+  let STEP = 110;
+
+  const arena = document.getElementById("arena");
+  let active = "rest";
+  const els = {};
+
+  // --- Drag state ---
+  let dragging = false;
+  let dragStartMouse = { x: 0, y: 0 };
+  let dragStartArena = { x: 0, y: 0 };
+  let dragMoved = false;
+  let dragBallId = null;
+
+  // Create balls once
+  BALLS.forEach((id) => {
+    const el = document.createElement("div");
+    el.className = "ball";
+    el.style.background = PALETTE[id];
+    arena.appendChild(el);
+    els[id] = el;
+
+    el.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      dragging = true;
+      dragMoved = false;
+      dragBallId = id;
+      dragStartMouse = { x: e.clientX, y: e.clientY };
+      const rect = arena.getBoundingClientRect();
+      dragStartArena = { x: rect.left, y: rect.top };
+    });
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - dragStartMouse.x;
+    const dy = e.clientY - dragStartMouse.y;
+    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) dragMoved = true;
+    if (dragMoved) {
+      arena.style.left = (dragStartArena.x + dx) + "px";
+      arena.style.top  = (dragStartArena.y + dy) + "px";
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (!dragging) return;
+    if (!dragMoved && dragBallId) {
+      active = active === dragBallId ? "rest" : dragBallId;
+      render();
+    }
+    dragging = false;
+    dragBallId = null;
+  });
+
+  // --- Derived layout values (recomputed on resize) ---
+  function getBase() {
+    const H = STEP - S * 0.5;
+    return {
+      b1: { x: STEP,     y: 0        },
+      b2: { x: STEP - H, y: STEP     },
+      b3: { x: STEP + H, y: STEP     },
+      b4: { x: STEP - H, y: 2 * STEP },
+      b5: { x: STEP + H, y: 2 * STEP },
+    };
+  }
+
+  function relaxAngles(angles, minSep) {
+    const a = angles.map((v) => ((v % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2));
+    const n = a.length;
+    const idx = a.map((v, i) => ({ v, i })).sort((x, y) => x.v - y.v);
+    for (let pass = 0; pass < 4; pass++) {
+      for (let i = 0; i < n; i++) {
+        const j = (i + 1) % n;
+        const cur = idx[i].v;
+        let next = idx[j].v;
+        if (j === 0) next += Math.PI * 2;
+        const d = next - cur;
+        if (d < minSep) {
+          const push = (minSep - d) / 2;
+          idx[i].v -= push;
+          idx[j].v += push;
+        }
+      }
+    }
+    const out = new Array(n).fill(0);
+    idx.forEach(({ v, i }) => (out[i] = v));
+    return out;
+  }
+
+  function getLayout(BASE) {
+    if (active === "rest") {
+      const layout = {};
+      BALLS.forEach((id) => (layout[id] = { x: BASE[id].x, y: BASE[id].y, s: 1 }));
+      return layout;
+    }
+    const center = BASE[active];
+    const others = BALLS.filter((b) => b !== active);
+    const rawAngles = others.map((id) => Math.atan2(BASE[id].y - center.y, BASE[id].x - center.x));
+    const fixedAngles = relaxAngles(rawAngles, MIN_ANGLE);
+    const layout = {};
+    layout[active] = { x: center.x, y: center.y, s: 1.5 };
+    others.forEach((id, i) => {
+      const a = fixedAngles[i];
+      layout[id] = {
+        x: center.x + Math.cos(a) * STEP,
+        y: center.y + Math.sin(a) * STEP,
+        s: 1,
+      };
+    });
+    return layout;
+  }
+
+  function render() {
+    const BASE = getBase();
+    arena.style.width  = (2 * STEP + S) + "px";
+    arena.style.height = (2 * STEP + 2 * S) + "px";
+    const layout = getLayout(BASE);
+    BALLS.forEach((id) => {
+      const { x, y, s } = layout[id];
+      const w = Math.round(S * s);
+      const offset = (w - S) / 2;  // shift so the center stays fixed
+      els[id].style.width  = w + "px";
+      els[id].style.height = w + "px";
+      els[id].style.transform = `translate(${x - offset}px, ${y - offset}px)`;
+    });
+  }
+
+  // Center arena on first load
+  function centerArena() {
+    arena.style.left = (window.innerWidth  / 2 - (2 * STEP + S) / 2) + "px";
+    arena.style.top  = (window.innerHeight / 2 - (2 * STEP + 2 * S) / 2) + "px";
+  }
+
+  // --- Sliders ---
+  const sliderS    = document.getElementById("sliderS");
+  const sliderStep = document.getElementById("sliderStep");
+  const valS       = document.getElementById("valS");
+  const valStep    = document.getElementById("valStep");
+
+  sliderS.addEventListener("input", () => {
+    S = +sliderS.value;
+    valS.textContent = S;
+    render();
+  });
+
+  sliderStep.addEventListener("input", () => {
+    STEP = +sliderStep.value;
+    valStep.textContent = STEP;
+    render();
+  });
+
+  centerArena();
+  render();
+</script>
+</body>
+</html>

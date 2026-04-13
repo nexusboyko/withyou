@@ -1,0 +1,47 @@
+{
+  "name": "withyou-widget",
+  "version": "1.0.0",
+  "description": "Desktop widget buddy",
+  "main": "main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "export DISPLAY=:0 && electron .",
+    "build": "electron-builder",
+    "package": "electron-builder --win --x64"
+  },
+  "keywords": [],
+  "author": "Alexander Boyko",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^37.2.3",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.withyou.widget",
+    "productName": "WithYou Widget",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "preload.js",
+      "style.css",
+      "icons.js",
+      "renderer.js"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "asar": true
+  },
+  "dependencies": {
+    "framer-motion": "^12.35.1"
+  }
+}

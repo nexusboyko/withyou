@@ -1,0 +1,22 @@
+[13587:0131/093617.519987:ERROR:angle_platform_impl.cc(44)] Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[13587:0131/093617.520268:ERROR:gl_display.cc(515)] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[13587:0131/093617.520398:ERROR:gl_display.cc(786)] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type
+[13587:0131/093617.521460:ERROR:angle_platform_impl.cc(44)] Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[13587:0131/093617.521623:ERROR:gl_display.cc(515)] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[13587:0131/093617.521728:ERROR:gl_display.cc(786)] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED
+[13587:0131/093617.521906:ERROR:gl_display.cc(820)] Initialization of all EGL display types failed.
+[13587:0131/093617.522008:ERROR:gl_ozone_egl.cc(26)] GLDisplayEGL::Initialize failed.
+[13587:0131/093617.549974:ERROR:angle_platform_impl.cc(44)] Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[13587:0131/093617.550120:ERROR:gl_display.cc(515)] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[13587:0131/093617.550217:ERROR:gl_display.cc(786)] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type
+[13587:0131/093617.551446:ERROR:angle_platform_impl.cc(44)] Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1086 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[13587:0131/093617.551550:ERROR:gl_display.cc(515)] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[13587:0131/093617.551650:ERROR:gl_display.cc(786)] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED
+[13587:0131/093617.551758:ERROR:gl_display.cc(820)] Initialization of all EGL display types failed.
+[13587:0131/093617.551841:ERROR:gl_ozone_egl.cc(26)] GLDisplayEGL::Initialize failed.
+[13587:0131/093617.553491:ERROR:viz_main_impl.cc(198)] Exiting GPU process due to errors during initialization
+[13612:0131/093617.651496:ERROR:command_buffer_proxy_impl.cc(131)] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.

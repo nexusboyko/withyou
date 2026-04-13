@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="widget">
+      <!-- Drag bounds indicator -->
+      <div id="drag-border"></div>
+
+      <!-- Lock indicator -->
+      <div id="lock-indicator"></div>
+
+      <!-- Balls -->
+      <div id="ball-hub" class="ball ball-hub" data-id="hub">
+        <div class="ball-content"></div>
+        <div class="tooltip">Hub</div>
+      </div>
+      <div id="ball-focus" class="ball ball-focus" data-id="focus">
+        <div class="ball-content"></div>
+        <div class="tooltip">Focus</div>
+      </div>
+      <div id="ball-system" class="ball ball-system" data-id="system">
+        <div class="ball-content"></div>
+        <div class="tooltip">System</div>
+      </div>
+      <div id="ball-placeholder" class="ball ball-placeholder" data-id="placeholder">
+        <div class="ball-content"></div>
+        <div class="tooltip">More</div>
+      </div>
+      <div id="ball-settings" class="ball ball-settings" data-id="settings">
+        <div class="ball-content"></div>
+        <div class="tooltip">Settings</div>
+      </div>
+    </div>
+
+    <script src="icons.js"></script>
+    <script src="renderer.js"></script>
+  </body>
+</html>

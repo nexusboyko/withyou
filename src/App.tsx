@@ -19,7 +19,7 @@ const pomodoroOptions: MenuOptionInfo = [
 
 const homeOptions: MenuOptionInfo = [
   {
-    text: "pomodoro",
+    text: "pomodoro",   
     icon: "🍅",
   },
   {
